@@ -1,0 +1,24 @@
+class Solution {
+    public boolean isValid(String s) {
+        Stack<Character> stac = new Stack<>();
+        for(char c: s.toCharArray()){
+            if(c == '('||c == '{'||c == '['){
+                stac.push(c);
+            }
+            else{
+                if(stac.empty())return false;
+                Character prev = stac.pop();
+                if(!((prev == '(' && c==')') ||
+                   (prev == '{' && c=='}') ||
+                   (prev == '[' && c==']') ))
+                   {
+                    return false;
+                }
+            }
+            
+            
+        }
+        if(!stac.empty())return false;
+        return true;
+    }
+}
