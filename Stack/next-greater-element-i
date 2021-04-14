@@ -1,0 +1,21 @@
+class Solution {
+    public int[] nextGreaterElement(int[] nums1, int[] nums2) {
+        Stack<Integer> ngr = new Stack();
+        Map<Integer,Integer> res = new HashMap();
+        
+        for(int i = nums2.length-1;i>=0;i--){
+            while(!ngr.isEmpty() && nums2[ngr.peek()]<nums2[i]){
+                ngr.pop();
+            }
+            int temp = ngr.isEmpty()?-1:nums2[ngr.peek()];
+            res.put(nums2[i],temp);
+            ngr.push(i);
+        }
+        
+        int[] ret = new int[nums1.length];
+        for( int i = 0; i<nums1.length;i++){
+            ret[i] = res.get(nums1[i]);
+        }
+        return ret;
+    }
+}
