@@ -1,0 +1,26 @@
+public static String longestKDistinctSubstring(String inpStr, int k){
+
+		int start = 0;
+		int maxLength = 0;
+		int maxStart = 0;
+		HashMap<Integer, Integer> charFreqMap = new HashMap();
+		for(int end = 0; end<inpStr.length(); end++){
+			charFreqMap.put(Integer.valueOf(inpStr.charAt(end)),charFreqMap.getOrDefault(Integer.valueOf(inpStr.charAt(end)),0)+1);
+			while(charFreqMap.keySet().size()>k){
+				int c = inpStr.charAt(start);
+				Integer val = charFreqMap.get(Integer.valueOf(c));
+				if(val==1){
+					charFreqMap.remove(c);
+				}else{
+					charFreqMap.put(c,val-1);
+				}
+				start++;
+			}
+
+			if(end-start+1>maxLength){
+				maxLength = end-start+1;
+				maxStart = start;
+			}
+		}
+		return inpStr.substring(maxStart,maxLength);
+	}
