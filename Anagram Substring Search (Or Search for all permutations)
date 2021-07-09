@@ -1,0 +1,43 @@
+	public static boolean compare(int[] arr1, int[] arr2){
+		for(int i = 0; i<256; i++){
+			if(arr1[i]!=arr2[i]){
+				return false;
+			}
+		}
+		return true;
+	}
+
+	public static void anagramSearch(String inp, String search){
+
+		int start = 0;
+
+		int n = search.length();
+
+		int[] substringCount = new int[256];
+		int[] searchCount = new int[256];
+
+		for(int i = 0;i<n;i++){
+			searchCount[search.charAt(i)]++;
+			substringCount[inp.charAt(i)]++;
+		}
+
+		for(int end = n; end< inp.length(); end++){
+
+			if(compare(substringCount,searchCount)){
+				System.out.println("Anagram starting at index: "+(end-n));
+			}
+			substringCount[inp.charAt(start++)]--;
+			substringCount[inp.charAt(end)]++;
+
+		}
+		//checking the last one
+		if(compare(substringCount,searchCount)){
+			System.out.println("Anagram starting at index: "+(inp.length()-n));
+		}
+	}
+	public static void main(String[] args) {
+		String inpStr = "abcacb";
+		int k = 3;
+		String search = "abc";
+		longestKDistinctSubarray.anagramSearch(inpStr, search );
+	}
