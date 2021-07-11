@@ -1,0 +1,52 @@
+You are given a network of n nodes, labeled from 1 to n. You are also given times, a list of travel times as directed edges times[i] = (ui, vi, wi), where ui is the source node, vi is the target node, and wi is the time it takes for a signal to travel from source to target.
+
+We will send a signal from a given node k. Return the time it takes for all the n nodes to receive the signal. If it is impossible for all the n nodes to receive the signal, return -1.
+
+Example 1:
+Input: times = [[2,1,1],[2,3,1],[3,4,1]], n = 4, k = 2
+Output: 2
+
+Answer:
+
+create a graph of adjacency list from the data given
+Use Djikstra's algorithm to traverse through the whole graph and also to find the shortest path
+loop through shortest path set to see if all nodes are present and also to find the max distance - that will be nextwork delay
+
+
+ public int networkDelayTime(int[][] times, int n, int k) {
+
+		HashMap<Integer,List<int[]>> graph = new HashMap();
+
+		for(int[] time: times){
+			if(!graph.containsKey(time[0])){
+				graph.put(time[0],new ArrayList<int[]>());
+			}
+			graph.get(time[0]).add(new int[]{time[1],time[2]});
+		}
+		//priority queue will have the next node and distance calculated from source, ready to be processed.
+		PriorityQueue<int[]> heap = new PriorityQueue<int[]>((node1,node2) -> node1[1]-node2[1]);
+		heap.offer(new int[] {k,0});
+		//Map of the node and distance calculated from source. (This is the final result map)
+		HashMap<Integer,Integer> shortestPath = new HashMap();
+
+		while(!heap.isEmpty()){
+			int[] currNode = heap.poll();
+			if(!shortestPath.containsKey(currNode[0])){
+				shortestPath.put(currNode[0],currNode[1]);
+				if(graph.containsKey(currNode[0])){
+					List<int[]> adjList = graph.get(currNode[0]);
+					for(int[] edge: adjList){
+						if(!shortestPath.containsKey(edge[0]))
+							heap.offer(new int[]{edge[0],edge[1]+currNode[1]});
+					}
+				}
+			}
+		}
+
+		if(shortestPath.size()!=n) return -1;
+		int maxDist = 0;
+		for(int dist: shortestPath.values()){
+			maxDist = Math.max(dist,maxDist);
+		}
+		return maxDist;
+	}
